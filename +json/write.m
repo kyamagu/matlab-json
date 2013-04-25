@@ -19,7 +19,7 @@ function write(value, filename, varargin)
   fid = 0;
   try
     fid = fopen(filename, 'w');
-    fprintf(fid, '%s', json.dump(value));
+    fprintf(fid, '%s', json.dump(value, varargin{:}));
     fclose(fid);
   catch e
     if fid ~= 0, fclose(fid); end
