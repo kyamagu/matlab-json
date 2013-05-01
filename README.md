@@ -5,8 +5,6 @@ This package contains Matlab class to serialize/decode matlab object in
 json format. The software uses org.json java package to convert json to
 java object and then translates it into Matlab object.
 
-Kota Yamaguchi 2013 <kyamagu@cs.stonybrook.edu>
-
 API
 ---
 
