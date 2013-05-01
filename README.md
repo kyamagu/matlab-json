@@ -12,6 +12,7 @@ API
 
 All functions are scoped under `json` namespace.
 
+    startup Initialize runtime environment.
     dump    Encode matlab value into a JSON string.
     load    Load matlab value from a JSON string.
     read    Load a matlab value from a JSON file.
@@ -20,7 +21,8 @@ All functions are scoped under `json` namespace.
 Usage
 -----
 
-Add path to the directory containing `+json` before use.
+Add path to the directory containing `+json` before use, and call
+`json.startup`.
 
 To serialize matlab object:
 
