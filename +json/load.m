@@ -57,7 +57,7 @@ function value = load(str, varargin)
 %
 % See also json.dump json.read
 
-  add_java_path_;
+  json.startup('WarnOnAddpath', true);
   options = get_options_(varargin{:});
   singleton = false;
 
@@ -74,20 +74,6 @@ function value = load(str, varargin)
   end
   value = parse_data_(node, options);
   if singleton, value = value{:}; end
-end
-
-function add_java_path_
-%ADD_JAVA_CLASS_
-  jar_file = fullfile(fileparts(mfilename('fullpath')), 'java', 'json.jar');
-  if ~any(strcmp(jar_file, javaclasspath))
-    javaaddpath(jar_file);
-    warning(['Adding json.jar to the dynamic Java class path. ' ... 
-      'As a side effect, all global variables have been cleared. '...
-      'To avoid this, add "%s" to the static Java class path. '...
-      'See <a href="%s/matlab/matlab_external/bringing-java-classes-and'...
-      '-methods-into-matlab-workspace.html">here</a> for more information.'...
-      ], jar_file, docroot);
-  end
 end
 
 function options = get_options_(varargin)
