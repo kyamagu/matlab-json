@@ -22,6 +22,9 @@ Usage
 Add path to the directory containing `+json` before use, and call
 `json.startup`.
 
+    >> addpath /path/to/matlab-json
+    >> json.startup
+
 To serialize matlab object:
 
     >> X = struct('field1', magic(2), 'field2', 'hello');
