@@ -16,9 +16,8 @@ function str = dump(value, varargin)
 %
 % The function takes following options.
 %
-%   'ColMajor'    Represent matrix in column-major order. Default false.
-%   'indent'      Pretty-print the output string with indentation.  Default
-%                 []
+%   'ColMajor'  Represent matrix in column-major order. Default false.
+%   'Indent'    Pretty-print the output string with indentation. Default [].
 %
 % EXAMPLE
 %
@@ -38,7 +37,7 @@ function str = dump(value, varargin)
 %
 %   [[1,4],[2,5],[3,6]]
 %
-%   >> str = json.dump([1,2,3;4,5,6], 'indent', 2)
+%   >> str = json.dump([1,2,3;4,5,6], 'Indent', 2)
 %     str =
 % 
 %     [
@@ -63,32 +62,16 @@ function str = dump(value, varargin)
 % mapped to the same json string '[1,2]'.
 %
 % See also json.load json.write
-
   json.startup('WarnOnAddpath', true);
-  options = get_options_(varargin{:});
-  obj = dump_data_(value, options);
-  if isempty(options.indent)
-      str = char(obj.toString());
-  else
-      str = char(obj.toString(options.indent));
-  end
-end
-
-function options = get_options_(varargin)
-%GET_OPTIONS_
-  options = struct(...
+  options = get_options_(struct(...
     'ColMajor', false,...
-    'indent', [] ...
-    );
-  for i = 1:2:numel(varargin)
-    switch varargin{i}
-      case 'ColMajor'
-        options.ColMajor = logical(varargin{i+1});
-      case 'indent'
-        options.indent = varargin{i+1};
-      otherwise
-        error('Unknown option to json.dump')
-    end
+    'Indent', [] ...
+    ), varargin{:});
+  obj = dump_data_(value, options);
+  if isempty(options.Indent)
+    str = char(obj.toString());
+  else
+    str = char(obj.toString(options.Indent));
   end
 end
 

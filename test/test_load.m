@@ -18,6 +18,7 @@ function test_load
     {'foo','bar','baz'}, '["foo","bar","baz"]';...
     };
   
+  json.startup;
   for i = 1:size(fixtures, 1)
     value = json.load(fixtures{i,2});
     if equal_(value, fixtures{i,1})

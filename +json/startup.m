@@ -21,6 +21,7 @@ function startup(varargin)
 %   >> json.startup
 %
 % See also javaaddpath javaclasspath
+  error(javachk('jvm'));
 
   WARN_ON_ADDPATH = false;
   for i = 1:2:numel(varargin)
@@ -28,7 +29,6 @@ function startup(varargin)
       case 'WarnOnAddpath', WARN_ON_ADDPATH = logical(varargin{i+1});
     end
   end
-
   jar_file = fullfile(fileparts(mfilename('fullpath')), 'java', 'json.jar');
   if ~any(strcmp(jar_file, javaclasspath))
     javaaddpath(jar_file);

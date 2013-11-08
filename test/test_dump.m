@@ -22,6 +22,7 @@ function test_dump
     ['foo';'bar';'baz'], '["foo","bar","baz"]';...
     };
   
+  json.startup;
   for i = 1:size(fixtures, 1)
     str = json.dump(fixtures{i,1});
     if strcmp(str, fixtures{i,2})

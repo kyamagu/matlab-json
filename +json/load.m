@@ -58,13 +58,14 @@ function value = load(str, varargin)
 % See also json.dump json.read
 
   json.startup('WarnOnAddpath', true);
-  options = get_options_(varargin{:});
-  singleton = false;
+  options = get_options_(struct(...
+    'MergeCell', true,...
+    'ColMajor', false...
+    ), varargin{:});
 
   str = strtrim(str);
-  if isempty(str)
-    error('json:invalidString','Invalid JSON string');
-  end
+  assert(~isempty(str), 'Empty JSON string.');
+  singleton = false;
   if str(1)=='{'
     node = org.json.JSONObject(java.lang.String(str));
   else
@@ -74,22 +75,6 @@ function value = load(str, varargin)
   end
   value = parse_data_(node, options);
   if singleton, value = value{:}; end
-end
-
-function options = get_options_(varargin)
-%GET_OPTIONS_
-  options = struct(...
-    'MergeCell', true,...
-    'ColMajor', false...
-    );
-  for i = 1:2:numel(varargin)
-    switch varargin{i}
-      case 'MergeCell'
-        options.MergeCell = logical(varargin{i+1});
-      case 'ColMajor'
-        options.ColMajor = logical(varargin{i+1});
-    end
-  end
 end
 
 function value = parse_data_(node, options)
