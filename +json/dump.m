@@ -111,8 +111,10 @@ function obj = dump_data_(value, options)
     for i = 1:numel(value)
       obj.put(dump_data_(value{i}, options));
     end
-  elseif isnumeric(value)
+  elseif isnumeric(value) && ~isnan(value)
     obj = java.lang.Double(value);
+  elseif isnumeric(value) && isnan(value) %isnumeric needed because isnan only exist for numeric.
+      obj = java.lang.String('NaN');
   elseif islogical(value)
     obj = java.lang.Boolean(value);
   elseif isstruct(value)

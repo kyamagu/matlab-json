@@ -79,10 +79,12 @@ end
 
 function value = parse_data_(node, options)
 %LOAD_DATA_
-  if isa(node, 'char')
+  if isa(node, 'char') && ~strcmp(node,'NaN')
     value = char(node);
   elseif isa(node, 'double')
     value = double(node);
+  elseif strcmp(node,'NaN')
+      value = NaN;
   elseif isa(node, 'logical')
     value = logical(node);
   elseif isa(node, 'org.json.JSONArray')
