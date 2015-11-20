@@ -35,7 +35,7 @@ SOFTWARE.
 /**
  * Test class. This file is not formally a member of the org.json library.
  * It is just a test tool.
- * 
+ *
  * Issue: JSONObject does not specify the ordering of keys, so simple-minded
  * comparisons of .toString to a string literal are likely to fail.
  *
@@ -286,7 +286,7 @@ public class Test extends TestCase {
         jsonarray.put(false);
         jsonarray.put(new JSONArray());
         jsonarray.put(new JSONObject());
-        jsonobject.put("keys", JSONObject.getNames(jsonobject));        
+        jsonobject.put("keys", JSONObject.getNames(jsonobject));
         assertEquals("{\n    \"to\": null,\n    \"ten\": 10,\n    \"JSONObject\": {},\n    \"JSONArray\": [],\n    \"op\": \"Good\",\n    \"keys\": [\n        \"to\",\n        \"ten\",\n        \"JSONObject\",\n        \"JSONArray\",\n        \"op\",\n        \"int\",\n        \"true\",\n        \"foo\",\n        \"zero\",\n        \"double\",\n        \"String\",\n        \"false\",\n        \"bool\",\n        \"\\\\u2028\",\n        \"\\\\u2029\",\n        \"null\"\n    ],\n    \"int\": 57,\n    \"true\": true,\n    \"foo\": [\n        true,\n        false,\n        9876543210,\n        0,\n        1.00000001,\n        1.000000000001,\n        1,\n        1.0E-17,\n        2,\n        0.1,\n        2.0E100,\n        -32,\n        [],\n        {},\n        \"string\",\n        666,\n        2001.99,\n        \"so \\\"fine\\\".\",\n        \"so <fine>.\",\n        true,\n        false,\n        [],\n        {}\n    ],\n    \"zero\": -0,\n    \"double\": 1.2345678901234568E29,\n    \"String\": \"98.6\",\n    \"false\": false,\n    \"bool\": \"true\",\n    \"\\\\u2028\": \"\\u2028\",\n    \"\\\\u2029\": \"\\u2029\",\n    \"null\": null\n}",
                 jsonobject.toString(4));
         assertEquals("<to>null</to><ten>10</ten><JSONObject></JSONObject><op>Good</op><keys>to</keys><keys>ten</keys><keys>JSONObject</keys><keys>JSONArray</keys><keys>op</keys><keys>int</keys><keys>true</keys><keys>foo</keys><keys>zero</keys><keys>double</keys><keys>String</keys><keys>false</keys><keys>bool</keys><keys>\\u2028</keys><keys>\\u2029</keys><keys>null</keys><int>57</int><true>true</true><foo>true</foo><foo>false</foo><foo>9876543210</foo><foo>0.0</foo><foo>1.00000001</foo><foo>1.000000000001</foo><foo>1.0</foo><foo>1.0E-17</foo><foo>2.0</foo><foo>0.1</foo><foo>2.0E100</foo><foo>-32</foo><foo></foo><foo></foo><foo>string</foo><foo>666</foo><foo>2001.99</foo><foo>so &quot;fine&quot;.</foo><foo>so &lt;fine&gt;.</foo><foo>true</foo><foo>false</foo><foo></foo><foo></foo><zero>-0.0</zero><double>1.2345678901234568E29</double><String>98.6</String><false>false</false><bool>true</bool><\\u2028>\u2028</\\u2028><\\u2029>\u2029</\\u2029><null>null</null>",
@@ -539,7 +539,7 @@ public class Test extends TestCase {
                 jsonobject.toString(1));
 
         jsonarray = new JSONArray("[2147483647, 2147483648, 9223372036854775807, 9223372036854775808]");
-        assertEquals("[\n 2147483647,\n 2147483648,\n 9223372036854775807,\n \"9223372036854775808\"\n]", 
+        assertEquals("[\n 2147483647,\n 2147483648,\n 9223372036854775807,\n \"9223372036854775808\"\n]",
                 jsonarray.toString(1));
 
         List expectedKeys = new ArrayList(6);
@@ -645,7 +645,7 @@ public class Test extends TestCase {
 
         string = "{plist=Apple; AnimalSmells = { pig = piggish; lamb = lambish; worm = wormy; }; AnimalSounds = { pig = oink; lamb = baa; worm = baa;  Lisa = \"Why is the worm talking like a lamb?\" } ; AnimalColors = { pig = pink; lamb = black; worm = pink; } } ";
         jsonobject = new JSONObject(string);
-        assertEquals("{\"AnimalColors\":{\"worm\":\"pink\",\"lamb\":\"black\",\"pig\":\"pink\"},\"plist\":\"Apple\",\"AnimalSounds\":{\"worm\":\"baa\",\"Lisa\":\"Why is the worm talking like a lamb?\",\"lamb\":\"baa\",\"pig\":\"oink\"},\"AnimalSmells\":{\"worm\":\"wormy\",\"lamb\":\"lambish\",\"pig\":\"piggish\"}}", 
+        assertEquals("{\"AnimalColors\":{\"worm\":\"pink\",\"lamb\":\"black\",\"pig\":\"pink\"},\"plist\":\"Apple\",\"AnimalSounds\":{\"worm\":\"baa\",\"Lisa\":\"Why is the worm talking like a lamb?\",\"lamb\":\"baa\",\"pig\":\"oink\"},\"AnimalSmells\":{\"worm\":\"wormy\",\"lamb\":\"lambish\",\"pig\":\"piggish\"}}",
                 jsonobject.toString());
 
         string = " [\"San Francisco\", \"New York\", \"Seoul\", \"London\", \"Seattle\", \"Shanghai\"]";
@@ -655,7 +655,7 @@ public class Test extends TestCase {
 
         string = "<a ichi='1' ni='2'><b>The content of b</b> and <c san='3'>The content of c</c><d>do</d><e></e><d>re</d><f/><d>mi</d></a>";
         jsonobject = XML.toJSONObject(string);
-        assertEquals("{\"a\":{\"f\":\"\",\"content\":\"and\",\"d\":[\"do\",\"re\",\"mi\"],\"ichi\":1,\"e\":\"\",\"b\":\"The content of b\",\"c\":{\"content\":\"The content of c\",\"san\":3},\"ni\":2}}", 
+        assertEquals("{\"a\":{\"f\":\"\",\"content\":\"and\",\"d\":[\"do\",\"re\",\"mi\"],\"ichi\":1,\"e\":\"\",\"b\":\"The content of b\",\"c\":{\"content\":\"The content of c\",\"san\":3},\"ni\":2}}",
                 jsonobject.toString());
         assertEquals("<a><f/>and<d>do</d><d>re</d><d>mi</d><ichi>1</ichi><e/><b>The content of b</b><c>The content of c<san>3</san></c><ni>2</ni></a>",
                 XML.toString(jsonobject));
@@ -724,16 +724,6 @@ public class Test extends TestCase {
             assertEquals("A JSONArray text must start with '[' at 1 [character 2 line 1]", jsone.getMessage());
         }
 
-        try {
-            jsonarray = new JSONArray();
-            jsonarray.put(Double.NEGATIVE_INFINITY);
-            jsonarray.put(Double.NaN);
-            System.out.println(jsonarray.toString());
-            fail("expecting JSONException here.");
-        } catch (JSONException jsone) {
-            assertEquals("JSON does not allow non-finite numbers.", jsone.getMessage());
-        }
-
         jsonobject = new JSONObject();
         try {
             System.out.println(jsonobject.getDouble("stooge"));
@@ -756,6 +746,7 @@ public class Test extends TestCase {
             assertEquals("Null key.", jsone.getMessage());
         }
 
+        jsonarray = new JSONArray();
         try {
             System.out.println(jsonarray.getDouble(0));
             fail("expecting JSONException here.");
@@ -768,13 +759,6 @@ public class Test extends TestCase {
             fail("expecting JSONException here.");
         } catch (JSONException jsone) {
             assertEquals("JSONArray[-1] not found.", jsone.getMessage());
-        }
-
-        try {
-            System.out.println(jsonarray.put(Double.NaN));
-            fail("expecting JSONException here.");
-        } catch (JSONException jsone) {
-            assertEquals("JSON does not allow non-finite numbers.", jsone.getMessage());
         }
 
         try {
