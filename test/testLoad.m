@@ -1,9 +1,12 @@
-function test_load
-%TEST_LOAD Test json.load.
+function testLoad
+%TESTLOAD Test json.load.
 
   fixtures = {...
     [],        'null';...
     1,         '1.0';...
+    inf,       'Infinity';...
+    -inf,      '-Infinity';...
+    nan,       'NaN';...
     true,      'true';...
     'foo',     'foo';...
     {},        '[]';...
@@ -17,11 +20,11 @@ function test_load
     struct('a',struct('b',{1,2})), '{"a":[{"b":1},{"b":2}]}';...
     {'foo','bar','baz'}, '["foo","bar","baz"]';...
     };
-  
+
   json.startup;
   for i = 1:size(fixtures, 1)
     value = json.load(fixtures{i,2});
-    if equal_(value, fixtures{i,1})
+    if equal(value, fixtures{i,1})
       fprintf('PASS\n');
     else
       fprintf('FAIL: fixture %d: ''%s''.\n', i, fixtures{i,2});
@@ -30,23 +33,23 @@ function test_load
 
 end
 
-function flag = equal_(value1, value2)
+function flag = equal(value1, value2)
 %EQUAL_ Check if two values are the same.
-  t1 = type_info_(value1);
-  t2 = type_info_(value2);
+  t1 = typeInfo(value1);
+  t2 = typeInfo(value2);
   flag = numel(t1) == numel(t2) && all(t1 == t2);
   if ~flag, return; end
-  
+
   if iscell(value1)
     for i = 1:numel(value1)
-      flag = equal_(value1{i}, value2{i});
+      flag = equal(value1{i}, value2{i});
       if ~flag, return; end
     end
   elseif isstruct(value1)
     for j = 1:numel(value1)
       fields = fieldnames(value1);
       for i = 1:numel(fields)
-        flag = equal_(value1(j).(fields{i}), value2(j).(fields{i}));
+        flag = equal(value1(j).(fields{i}), value2(j).(fields{i}));
         if ~flag, return; end
       end
     end
@@ -55,8 +58,8 @@ function flag = equal_(value1, value2)
   end
 end
 
-function vec = type_info_(value)
-%TYPE_INFO_ Return binary encoding of type information
+function vec = typeInfo(value)
+%TYPEINFO Return binary encoding of type information
   vec = [uint8(class(value)), typecast(size(value), 'uint8')];
   if isstruct(value)
     fields = fieldnames(value);

@@ -1,10 +1,10 @@
-function test_all
-%TEST_ALL Run all tests.
+function testAll
+%TESTALL Run all tests.
 
-  files = dir(fullfile('test', 'test_*.m'));
+  files = dir(fullfile('test', 'test*.m'));
   for i = 1:numel(files)
     fname = strrep(files(i).name, '.m', '');
-    if ~strcmp(fname, 'test_all')
+    if ~strcmp(fname, 'testAll')
       fprintf('== %s ==\n', fname);
       feval(fname);
     end

@@ -9,7 +9,7 @@ function startup(varargin)
 % any matlab internal states, such as global/persistent variables or mex
 % functions. To avoid unexpected state reset, execute this function once before
 % using other json API functions.
-% 
+%
 % OPTIONS
 %
 % The function takes a following option.
@@ -22,17 +22,12 @@ function startup(varargin)
 %
 % See also javaaddpath javaclasspath
   error(javachk('jvm'));
-
-  WARN_ON_ADDPATH = false;
-  for i = 1:2:numel(varargin)
-    switch varargin{i}
-      case 'WarnOnAddpath', WARN_ON_ADDPATH = logical(varargin{i+1});
-    end
-  end
+  options.WarnOnAddPath = false;
+  options = getOptions(options, varargin{:});
   jar_file = fullfile(fileparts(mfilename('fullpath')), 'java', 'json.jar');
   if ~any(strcmp(jar_file, javaclasspath))
     javaaddpath(jar_file);
-    if WARN_ON_ADDPATH
+    if options.WarnOnAddPath
       warning('json:startup', ['Adding json.jar to the dynamic Java class ' ...
         'path. This has cleared matlab internal states, such as global '...
         'variables, persistent variables, or mex functions. To avoid this, '...

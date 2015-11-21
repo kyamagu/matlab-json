@@ -1,8 +1,6 @@
 function value = read(filename, varargin)
 %READ Load a matlab value from a JSON file.
 %
-% SYNOPSIS
-%
 %   value = json.read(filename)
 %   value = json.read(..., optionName, optionValue, ...)
 %

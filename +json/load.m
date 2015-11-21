@@ -1,8 +1,6 @@
 function value = load(str, varargin)
 %LOAD Load matlab value from a JSON string.
 %
-% SYNOPSIS
-%
 %   value = json.load(str)
 %   value = json.dump(..., optionName, optionValue, ...)
 %
@@ -24,8 +22,8 @@ function value = load(str, varargin)
 % EXAMPLE
 %
 %   >> value = json.load('{"char":"hello","matrix":[[1,3],[4,2]]}')
-%   value = 
-% 
+%   value =
+%
 %         char: 'hello'
 %       matrix: [2x2 double]
 %
@@ -42,7 +40,7 @@ function value = load(str, varargin)
 %        3     6
 %
 %   >> value = json.load('[[1,2,3],[4,5,6]]', 'MergeCell', false)
-%   value = 
+%   value =
 %
 %       {1x3 cell}    {1x3 cell}
 %
@@ -58,10 +56,9 @@ function value = load(str, varargin)
 % See also json.dump json.read
 
   json.startup('WarnOnAddpath', true);
-  options = get_options_(struct(...
-    'MergeCell', true,...
-    'ColMajor', false...
-    ), varargin{:});
+  options.MergeCell = true;
+  options.ColMajor = false;
+  options = getOptions(options, varargin{:});
 
   str = strtrim(str);
   assert(~isempty(str), 'Empty JSON string.');
@@ -73,12 +70,14 @@ function value = load(str, varargin)
     if singleton, str = ['[',str,']']; end
     node = org.json.JSONArray(java.lang.String(str));
   end
-  value = parse_data_(node, options);
-  if singleton, value = value{:}; end
+  value = parseData(node, options);
+  if singleton
+    value = value{:};
+  end
 end
 
-function value = parse_data_(node, options)
-%LOAD_DATA_
+function value = parseData(node, options)
+%PARSEDATA
   if isa(node, 'char')
     value = char(node);
   elseif isa(node, 'double')
@@ -88,10 +87,10 @@ function value = parse_data_(node, options)
   elseif isa(node, 'org.json.JSONArray')
     value = cell(node.length() > 0, node.length());
     for i = 1:node.length()
-      value{i} = parse_data_(node.get(i-1), options);
+      value{i} = parseData(node.get(i-1), options);
     end
     if options.MergeCell
-      value = merge_cell_(value, options);
+      value = mergeCell(value, options);
     end
   elseif isa(node, 'org.json.JSONObject')
     value = struct;
@@ -104,8 +103,7 @@ function value = parse_data_(node, options)
         warning('json:fieldNameConflict', ...
                 'Field %s renamed to %s', field, safe_field);
       end
-      value.(safe_field) = parse_data_(node.get(java.lang.String(key)), ...
-                                       options);
+      value.(safe_field) = parseData(node.get(java.lang.String(key)), options);
     end
   elseif isa(node, 'org.json.JSONObject$Null')
     value = [];
@@ -114,8 +112,8 @@ function value = parse_data_(node, options)
   end
 end
 
-function value = merge_cell_(value, options)
-%MERGE_CELL_
+function value = mergeCell(value, options)
+%MERGECELL
   if isempty(value) || all(cellfun(@isempty, value))
     return;
   end
@@ -126,7 +124,7 @@ function value = merge_cell_(value, options)
     return;
   end
 
-  if is_mergeable_(value);
+  if isMergeable(value)
     dim = ndims(value)+1;
     mergeable = true;
     if options.ColMajor
@@ -134,7 +132,7 @@ function value = merge_cell_(value, options)
         dim = 1;
         if all(cellfun(@iscell, value)) % Singleton row vector [[a],[b]].
           value = cat(2, value{:});
-          mergeable = is_mergeable_(value);
+          mergeable = isMergeable(value);
           dim = 2;
         end
       elseif all(cellfun(@iscolumn, value))
@@ -145,7 +143,7 @@ function value = merge_cell_(value, options)
         dim = 2;
         if all(cellfun(@iscell, value)) % Singleton col vector [[a],[b]].
           value = cat(1, value{:});
-          mergeable = is_mergeable_(value);
+          mergeable = isMergeable(value);
           dim = 1;
         end
       elseif all(cellfun(@isrow, value))
@@ -158,19 +156,19 @@ function value = merge_cell_(value, options)
   end
 end
 
-function flag = is_mergeable_(value)
-%CHECK_MERGEABLE_ Check if the cell array is mergeabhe.
-  signature = type_info_(value{1});
+function flag = isMergeable(value)
+%ISMERGEABLE Check if the cell array is mergeable.
+  signature = typeInfo(value{1});
   flag = true;
   for i = 2:numel(value)
-    vec = type_info_(value{i});
+    vec = typeInfo(value{i});
     flag = numel(signature) == numel(vec) && all(signature == vec);
     if ~flag, break; end
   end
 end
 
-function vec = type_info_(value)
-%TYPE_INFO_ Return binary encoding of type information
+function vec = typeInfo(value)
+%TYPEINFO Return binary encoding of type information.
   vec = [uint8(class(value)), typecast(size(value), 'uint8')];
   if isstruct(value)
     fields = fieldnames(value);
