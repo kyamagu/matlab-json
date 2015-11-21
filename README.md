@@ -25,14 +25,14 @@ Add path to the directory containing `+json` before use, and call
     >> addpath /path/to/matlab-json
     >> json.startup
 
-To serialize matlab object:
+To serialize a matlab object:
 
     >> X = struct('field1', magic(2), 'field2', 'hello');
     >> S = json.dump(X);
     >> disp(S);
     {"field2":"hello","field1":[[1,3],[4,2]]}
 
-To decode json string:
+To decode a json string:
 
     >> X = json.load(S);
     >> disp(X);
@@ -57,10 +57,10 @@ exactly same input to `json.dump`.
 This implementation is designed to maximize the ease of data exchange. For
 that purpose, by default, json parser assumes the following.
 
- * Native arrays precede a cell array. "[1,2]" is [1,2] in matlab.
- * Row-major order. e.g., "[[1,2],[3,4]]" is [1,2;3,4] in matlab.
+ * Native arrays precede a cell array. `"[1,2]"` is `[1,2]` in matlab.
+ * Row-major order. e.g., `"[[1,2],[3,4]]"` is `[1,2;3,4]` in matlab.
  * N-D array is a nested json array.
- * Any other ambiguous arrays are treated as cell array. "[]" is {}.
+ * Any other ambiguous arrays are treated as cell array. `"[]"` is `{}`.
 
 For example, a nested array with the same sized elements is treated as an N-D
 array.
@@ -89,10 +89,10 @@ Be cautious when converting a huge variable.
 Test
 ----
 
-To run a test, use `test_all` function in the `test` directory.
+To run a test, use `testAll` function in the `test` directory.
 
     >> addpath('test');
-    >> test_all;
+    >> testAll;
 
 License
 -------
