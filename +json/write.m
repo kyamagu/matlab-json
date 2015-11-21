@@ -1,8 +1,6 @@
 function write(value, filename, varargin)
 %WRITE Write a matlab value into a JSON file.
 %
-% SYNOPSIS
-%
 %   json.write(value, filename)
 %   json.write(..., optionName, optionValue, ...)
 %

@@ -1,8 +1,6 @@
 function str = dump(value, varargin)
 %DUMP Encode matlab value into a JSON string.
 %
-% SYNOPSIS
-%
 %   str = json.dump(value)
 %   str = json.dump(..., optionName, optionValue, ...)
 %
@@ -39,7 +37,7 @@ function str = dump(value, varargin)
 %
 %   >> str = json.dump([1,2,3;4,5,6], 'Indent', 2)
 %     str =
-% 
+%
 %     [
 %       [
 %         1,
@@ -63,11 +61,10 @@ function str = dump(value, varargin)
 %
 % See also json.load json.write
   json.startup('WarnOnAddpath', true);
-  options = get_options_(struct(...
-    'ColMajor', false,...
-    'Indent', [] ...
-    ), varargin{:});
-  obj = dump_data_(value, options);
+  options.ColMajor = false;
+  options.Indent = [];
+  options = getOptions(options, varargin{:});
+  obj = dumpData(value, options);
   if isempty(options.Indent)
     str = char(obj.toString());
   else
@@ -75,41 +72,41 @@ function str = dump(value, varargin)
   end
 end
 
-function obj = dump_data_(value, options)
-%DUMP_DATA_
+function obj = dumpData(value, options)
+%DUMPDATA
   if ischar(value) && (isvector(value) || isempty(value))
     obj = java.lang.String(value);
   elseif isempty(value) && isnumeric(value)
     obj = org.json.JSONObject.NULL;
   elseif ~isscalar(value)
     obj = org.json.JSONArray();
-    
+
     if ndims(value) > 2
       split_value = num2cell(value, 1:ndims(value)-1);
       for i = 1:numel(split_value)
-        obj.put(dump_data_(split_value{i}, options));
+        obj.put(dumpData(split_value{i}, options));
       end
     else
       if options.ColMajor && iscolumn(value) || ...
           ~options.ColMajor && isrow(value)
         if iscell(value)
-          for i = 1:numel(value), obj.put(dump_data_(value{i}, options)); end
+          for i = 1:numel(value), obj.put(dumpData(value{i}, options)); end
         else
-          for i = 1:numel(value), obj.put(dump_data_(value(i), options)); end
+          for i = 1:numel(value), obj.put(dumpData(value(i), options)); end
         end
       else
         value = num2cell(value, 2 - options.ColMajor);
         if all(cellfun(@isscalar, value))
-          for i = 1:numel(value), obj.put(dump_data_(value(i), options)); end
+          for i = 1:numel(value), obj.put(dumpData(value(i), options)); end
         else
-          for i = 1:numel(value), obj.put(dump_data_(value{i}, options)); end
+          for i = 1:numel(value), obj.put(dumpData(value{i}, options)); end
         end
       end
     end
   elseif iscell(value)
     obj = org.json.JSONArray();
     for i = 1:numel(value)
-      obj.put(dump_data_(value{i}, options));
+      obj.put(dumpData(value{i}, options));
     end
   elseif isnumeric(value)
     obj = java.lang.Double(value);
@@ -119,7 +116,7 @@ function obj = dump_data_(value, options)
     obj = org.json.JSONObject();
     keys = fieldnames(value);
     for i = 1:length(keys)
-      obj.put(keys{i},dump_data_(value.(keys{i}), options));
+      obj.put(keys{i},dumpData(value.(keys{i}), options));
     end
   else
     error('json:typeError', 'Unsupported data type: %s', class(value));
