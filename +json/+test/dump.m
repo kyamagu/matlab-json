@@ -1,5 +1,5 @@
-function testDump
-%TESTDUMP Test json.dump.
+function dump
+%DUMP Test json.dump.
 
   fixtures = {...
     [],        'null';...
@@ -23,15 +23,14 @@ function testDump
     struct('a',struct('b',{1,2})), '{"a":[{"b":1},{"b":2}]}';...
     {'foo','bar','baz'}, '["foo","bar","baz"]';...
     ['foo';'bar';'baz'], '["foo","bar","baz"]';...
-    };
+  };
 
-  json.startup;
   for i = 1:size(fixtures, 1)
     str = json.dump(fixtures{i,1});
     if strcmp(str, fixtures{i,2})
-      fprintf('PASS\n');
+      fprintf('PASS: fixture %g\n', i);
     else
-      fprintf('FAIL: fixture %d: ''%s'', expected ''%s''.\n',...
+      fprintf('FAIL: fixture %g: ''%s'', expected ''%s''.\n',...
               i, str, fixtures{i,2});
     end
   end

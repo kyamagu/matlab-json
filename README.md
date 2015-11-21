@@ -89,10 +89,9 @@ Be cautious when converting a huge variable.
 Test
 ----
 
-To run a test, use `testAll` function in the `test` directory.
+To run a test, invoke `json.test.run`.
 
-    >> addpath('test');
-    >> testAll;
+    >> json.test.run
 
 License
 -------

@@ -1,8 +1,6 @@
 function startup(varargin)
 %STARTUP Initialize runtime environment.
 %
-% SYNOPSIS
-%
 %   json.startup(optionName, optionValue, ...)
 %
 % The function internally adds dynamic java class path. This process clears
@@ -20,13 +18,22 @@ function startup(varargin)
 %
 %   >> json.startup
 %
-% See also javaaddpath javaclasspath
-  error(javachk('jvm'));
-  options.WarnOnAddPath = false;
-  options = getOptions(options, varargin{:});
-  jar_file = fullfile(fileparts(mfilename('fullpath')), 'java', 'json.jar');
-  if ~any(strcmp(jar_file, javaclasspath))
-    javaaddpath(jar_file);
+% See also javaaddpath javaclasspath startup
+
+  root = fileparts(fileparts(mfilename('fullpath')));
+  jarfile = fullfile(root, 'java', 'json.jar');
+
+  if ~any(strcmp(jarfile, javaclasspath))
+    options.WarnOnAddPath = false;
+    options = getOptions(options, varargin{:});
+
+    % Check runtime.
+    error(javachk('jvm'));
+    assert(exist(jarfile, 'file') > 0, 'File not found: %s', jarfile);
+
+    % Add the JAR file to the java path.
+    javaaddpath(jarfile);
+
     if options.WarnOnAddPath
       warning('json:startup', ['Adding json.jar to the dynamic Java class ' ...
         'path. This has cleared matlab internal states, such as global '...

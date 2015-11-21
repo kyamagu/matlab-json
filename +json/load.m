@@ -158,20 +158,6 @@ end
 
 function flag = isMergeable(value)
 %ISMERGEABLE Check if the cell array is mergeable.
-  signature = typeInfo(value{1});
-  flag = true;
-  for i = 2:numel(value)
-    vec = typeInfo(value{i});
-    flag = numel(signature) == numel(vec) && all(signature == vec);
-    if ~flag, break; end
+  flag = all(cellfun(@(x)isa(x, class(value{1})), value)) && ...
+         all(cellfun(@(x)isequal(size(x), size(value{1})), value));
   end
-end
-
-function vec = typeInfo(value)
-%TYPEINFO Return binary encoding of type information.
-  vec = [uint8(class(value)), typecast(size(value), 'uint8')];
-  if isstruct(value)
-    fields = fieldnames(value);
-    vec = [vec, uint8([fields{:}])];
-  end
-end
