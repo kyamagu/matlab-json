@@ -34,7 +34,7 @@ function testLoad
 end
 
 function flag = equal(value1, value2)
-%EQUAL_ Check if two values are the same.
+%EQUAL Check if two values are the same.
   t1 = typeInfo(value1);
   t2 = typeInfo(value2);
   flag = numel(t1) == numel(t2) && all(t1 == t2);
@@ -54,7 +54,8 @@ function flag = equal(value1, value2)
       end
     end
   elseif ~isempty(value1)
-    flag = all(value1(:) == value2(:));
+    flag = all(value1(:) == value2(:)) || ...
+           (all(isnan(value1(:))) && all(isnan(value2(:))));
   end
 end
 
