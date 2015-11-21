@@ -1,9 +1,9 @@
-Matlab JSON v0.2
-================
+Matlab JSON
+===========
 
 This package contains Matlab class to serialize/decode matlab object in
-json format. The software uses org.json java package to convert json to
-java object and then translates it into Matlab object.
+json format. The software uses customized `org.json` java package to convert
+json to java object and then translates it into Matlab object.
 
 API
 ---
@@ -20,7 +20,7 @@ Usage
 -----
 
 Add path to the directory containing `+json` before use, and call
-`json.startup`.
+`json.startup`. This is optional, but recommended.
 
     >> addpath /path/to/matlab-json
     >> json.startup
@@ -66,11 +66,11 @@ For example, a nested array with the same sized elements is treated as an N-D
 array.
 
     >> x = json.load('[[[1,2],[3,4]],[[5,6],[7,8]]]')
-    
+
     x(:,:,1) =
          1     2
          3     4
-    
+
     x(:,:,2) =
          5     6
          7     8
@@ -78,6 +78,13 @@ array.
 
 The `json.load` function can optionally take an option to specify column-major
 interpretation or cell-array precedence. Check `help json.load` for details.
+
+In addition to [the standard JSON specification](http://json.org), the included
+JSON parser accepts non-finite double values (`Infinity`, `NaN`).
+
+The package is designed to make conversion as easy as possible. However,
+due to Java usage inside Matlab, the package is not optimized for performance.
+Be cautious when converting a huge variable.
 
 Test
 ----
@@ -92,14 +99,7 @@ License
 
 You may redistribute this software under BSD license.
 
-
-Version
--------
-
- * 0.2 API changed to functions from a class.
- * 0.1 Initial release.
-
 Links
 -----
 
-JSON in Java: http://json.org/java/
+[JSON in Java](http://json.org/java/)
