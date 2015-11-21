@@ -7,7 +7,8 @@ TARGETS = $(patsubst %.java,%.class,$(SOURCES))
 all: json.jar
 
 json.jar: $(TARGETS)
-	jar cvf $@ $(SOURCES) $(TARGETS)
+	jar cvf $@ org
+	jar i $@
 
 %.class:%.java
 	javac -cp $(CLASSPATH) $<
